@@ -1140,6 +1140,28 @@
   </dependencyManagement>
   <repositories>
     <repository>
+      <id>alimaven</id>
+      <name>aliyun maven</name>
+      <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>alimaven-spring</id>
+      <name>aliyun maven</name>
+      <url>https://maven.aliyun.com/repository/spring</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
       <id>Maven Central</id>
       <name>Maven Repository</name>
       <url>https://repo.maven.apache.org/maven2</url>
@@ -1152,7 +1174,7 @@
     </repository>
     <repository>
       <id>cloudera-repo-releases</id>
-      <url>https://repository.cloudera.com/artifactory/public/</url>
+      <url>https://repository.cloudera.com/artifactory/cloudera-repos/</url>
       <releases>
         <enabled>true</enabled>
       </releases>

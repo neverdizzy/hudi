@@ -53,6 +53,10 @@
      "type": "double"
   }, {
      "name": "day", 
-     "type":"string"
+     "type": "string"
+  }, {
+     "name": "add", 
+     "type": ["null", "string"],
+     "default": null
   }
 ]}
