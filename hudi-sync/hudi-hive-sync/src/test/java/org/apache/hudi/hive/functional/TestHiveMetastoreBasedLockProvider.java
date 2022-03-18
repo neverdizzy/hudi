@@ -24,7 +24,7 @@ import org.apache.hudi.common.config.TypedProperties;
 import org.apache.hudi.hive.HiveMetastoreBasedLockProvider;
 import org.apache.hudi.hive.testutils.HiveSyncFunctionalTestHarness;
 
-import org.apache.hadoop.hive.metastore.api.DataOperationType;
+// import org.apache.hadoop.hive.metastore.api.DataOperationType;
 import org.apache.hadoop.hive.metastore.api.LockComponent;
 import org.apache.hadoop.hive.metastore.api.LockLevel;
 import org.apache.hadoop.hive.metastore.api.LockType;
@@ -81,7 +81,7 @@ public class TestHiveMetastoreBasedLockProvider extends HiveSyncFunctionalTestHa
   @Test
   public void testAcquireLock() throws Exception {
     HiveMetastoreBasedLockProvider lockProvider = new HiveMetastoreBasedLockProvider(lockConfiguration, hiveConf());
-    lockComponent.setOperationType(DataOperationType.NO_TXN);
+    // lockComponent.setOperationType(DataOperationType.NO_TXN);
     Assertions.assertTrue(lockProvider.acquireLock(lockConfiguration.getConfig()
         .getLong(LOCK_ACQUIRE_WAIT_TIMEOUT_MS_PROP_KEY), TimeUnit.MILLISECONDS, lockComponent));
     try {
@@ -101,7 +101,7 @@ public class TestHiveMetastoreBasedLockProvider extends HiveSyncFunctionalTestHa
   @Test
   public void testUnlock() throws Exception {
     HiveMetastoreBasedLockProvider lockProvider = new HiveMetastoreBasedLockProvider(lockConfiguration, hiveConf());
-    lockComponent.setOperationType(DataOperationType.NO_TXN);
+    // lockComponent.setOperationType(DataOperationType.NO_TXN);
     Assertions.assertTrue(lockProvider.acquireLock(lockConfiguration.getConfig()
         .getLong(LOCK_ACQUIRE_WAIT_TIMEOUT_MS_PROP_KEY), TimeUnit.MILLISECONDS, lockComponent));
     lockProvider.unlock();
@@ -114,7 +114,7 @@ public class TestHiveMetastoreBasedLockProvider extends HiveSyncFunctionalTestHa
   @Test
   public void testReentrantLock() throws Exception {
     HiveMetastoreBasedLockProvider lockProvider = new HiveMetastoreBasedLockProvider(lockConfiguration, hiveConf());
-    lockComponent.setOperationType(DataOperationType.NO_TXN);
+    // lockComponent.setOperationType(DataOperationType.NO_TXN);
     Assertions.assertTrue(lockProvider.acquireLock(lockConfiguration.getConfig()
         .getLong(LOCK_ACQUIRE_WAIT_TIMEOUT_MS_PROP_KEY), TimeUnit.MILLISECONDS, lockComponent));
     try {
@@ -132,7 +132,7 @@ public class TestHiveMetastoreBasedLockProvider extends HiveSyncFunctionalTestHa
     // create different HiveMetastoreBasedLockProvider to simulate different applications
     HiveMetastoreBasedLockProvider lockProvider1 = new HiveMetastoreBasedLockProvider(lockConfiguration, hiveConf());
     HiveMetastoreBasedLockProvider lockProvider2 = new HiveMetastoreBasedLockProvider(lockConfiguration, hiveConf());
-    lockComponent.setOperationType(DataOperationType.NO_TXN);
+    // lockComponent.setOperationType(DataOperationType.NO_TXN);
     Assertions.assertTrue(lockProvider1.acquireLock(lockConfiguration.getConfig()
         .getLong(LOCK_ACQUIRE_WAIT_TIMEOUT_MS_PROP_KEY), TimeUnit.MILLISECONDS, lockComponent));
     try {
@@ -159,7 +159,7 @@ public class TestHiveMetastoreBasedLockProvider extends HiveSyncFunctionalTestHa
   @Test
   public void testUnlockWithoutLock() {
     HiveMetastoreBasedLockProvider lockProvider = new HiveMetastoreBasedLockProvider(lockConfiguration, hiveConf());
-    lockComponent.setOperationType(DataOperationType.NO_TXN);
+    // lockComponent.setOperationType(DataOperationType.NO_TXN);
     lockProvider.unlock();
   }
 

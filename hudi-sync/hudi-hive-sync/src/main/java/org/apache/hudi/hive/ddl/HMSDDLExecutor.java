@@ -29,7 +29,7 @@ import org.apache.hudi.hive.util.HiveSchemaUtil;
 
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.hive.common.StatsSetupConst;
+// import org.apache.hadoop.hive.common.StatsSetupConst;
 import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.hadoop.hive.metastore.IMetaStoreClient;
 import org.apache.hadoop.hive.metastore.TableType;
@@ -142,9 +142,10 @@ public class HMSDDLExecutor implements DDLExecutor {
       EnvironmentContext environmentContext = new EnvironmentContext();
       if (cascade) {
         LOG.info("partition table,need cascade");
-        environmentContext.putToProperties(StatsSetupConst.CASCADE, StatsSetupConst.TRUE);
+        // environmentContext.putToProperties(StatsSetupConst.CASCADE, StatsSetupConst.TRUE);
       }
-      client.alter_table_with_environmentContext(syncConfig.databaseName, tableName, table, environmentContext);
+      // client.alter_table_with_environmentContext(syncConfig.databaseName, tableName, table, environmentContext);
+      client.alter_table(syncConfig.databaseName, tableName, table, cascade);
     } catch (Exception e) {
       LOG.error("Failed to update table for " + tableName, e);
       throw new HoodieHiveSyncException("Failed to update table for " + tableName, e);
@@ -220,7 +221,8 @@ public class HMSDDLExecutor implements DDLExecutor {
         sd.setLocation(fullPartitionPath);
         return new Partition(partitionValues, syncConfig.databaseName, tableName, 0, 0, sd, null);
       }).collect(Collectors.toList());
-      client.alter_partitions(syncConfig.databaseName, tableName, partitionList, null);
+      // client.alter_partitions(syncConfig.databaseName, tableName, partitionList, null);
+      client.alter_partitions(syncConfig.databaseName, tableName, partitionList);
     } catch (TException e) {
       LOG.error(syncConfig.databaseName + "." + tableName + " update partition failed", e);
       throw new HoodieHiveSyncException(syncConfig.databaseName + "." + tableName + " update partition failed", e);

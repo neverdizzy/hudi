@@ -44,7 +44,7 @@ import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.hadoop.hive.conf.HiveConf.ConfVars;
 import org.apache.hadoop.hive.metastore.HiveMetaStoreClient;
 import org.apache.hadoop.hive.metastore.IMetaStoreClient;
-import org.apache.hadoop.hive.metastore.RetryingMetaStoreClient;
+// import org.apache.hadoop.hive.metastore.RetryingMetaStoreClient;
 import org.apache.hadoop.hive.metastore.api.Database;
 import org.apache.hadoop.hive.metastore.api.NoSuchObjectException;
 import org.apache.hadoop.hive.ql.metadata.Hive;
@@ -110,7 +110,7 @@ public class TestCluster implements BeforeAllCallback, AfterAllCallback,
     dfsCluster = hdfsTestService.start(true);
 
     conf = hdfsTestService.getHadoopConf();
-    conf.setInt(ConfVars.METASTORE_SERVER_PORT.varname, port++);
+    // conf.setInt(ConfVars.METASTORE_SERVER_PORT.varname, port++);
     conf.setInt(ConfVars.HIVE_SERVER2_THRIFT_PORT.varname, port++);
     conf.setInt(ConfVars.HIVE_SERVER2_WEBUI_PORT.varname, port++);
     hiveTestService = new HiveTestService(conf);
@@ -121,8 +121,8 @@ public class TestCluster implements BeforeAllCallback, AfterAllCallback,
     try (OutputStream os = new FileOutputStream(hiveSiteXml)) {
       hiveTestService.getServerConf().writeXml(os);
     }
-    client = HiveMetaStoreClient.newSynchronizedClient(
-        RetryingMetaStoreClient.getProxy(hiveTestService.getServerConf(), true));
+    // client = HiveMetaStoreClient.newSynchronizedClient(
+        // RetryingMetaStoreClient.getProxy(hiveTestService.getServerConf(), true));
   }
 
   public Configuration getConf() {
