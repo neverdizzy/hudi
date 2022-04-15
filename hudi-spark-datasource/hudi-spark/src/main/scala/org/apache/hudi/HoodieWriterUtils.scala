@@ -47,44 +47,6 @@ object HoodieWriterUtils {
     * @return
     */
   def parametersWithWriteDefaults(parameters: Map[String, String]): Map[String, String] = {
-    Map(OPERATION.key -> OPERATION.defaultValue,
-      TABLE_TYPE.key -> TABLE_TYPE.defaultValue,
-      PRECOMBINE_FIELD.key -> PRECOMBINE_FIELD.defaultValue,
-      PAYLOAD_CLASS_NAME.key -> PAYLOAD_CLASS_NAME.defaultValue,
-      RECORDKEY_FIELD.key -> RECORDKEY_FIELD.defaultValue,
-      PARTITIONPATH_FIELD.key -> PARTITIONPATH_FIELD.defaultValue,
-      KEYGENERATOR_CLASS_NAME.key -> DEFAULT_KEYGENERATOR_CLASS_OPT_VAL,
-      ENABLE.key -> ENABLE.defaultValue.toString,
-      COMMIT_METADATA_KEYPREFIX.key -> COMMIT_METADATA_KEYPREFIX.defaultValue,
-      INSERT_DROP_DUPS.key -> INSERT_DROP_DUPS.defaultValue,
-      STREAMING_RETRY_CNT.key -> STREAMING_RETRY_CNT.defaultValue,
-      STREAMING_RETRY_INTERVAL_MS.key -> STREAMING_RETRY_INTERVAL_MS.defaultValue,
-      STREAMING_IGNORE_FAILED_BATCH.key -> STREAMING_IGNORE_FAILED_BATCH.defaultValue,
-      META_SYNC_CLIENT_TOOL_CLASS_NAME.key -> META_SYNC_CLIENT_TOOL_CLASS_NAME.defaultValue,
-      HIVE_SYNC_ENABLED.key -> HIVE_SYNC_ENABLED.defaultValue,
-      META_SYNC_ENABLED.key -> META_SYNC_ENABLED.defaultValue,
-      HIVE_DATABASE.key -> HIVE_DATABASE.defaultValue,
-      HIVE_TABLE.key -> HIVE_TABLE.defaultValue,
-      HIVE_BASE_FILE_FORMAT.key -> HIVE_BASE_FILE_FORMAT.defaultValue,
-      HIVE_USER.key -> HIVE_USER.defaultValue,
-      HIVE_PASS.key -> HIVE_PASS.defaultValue,
-      HIVE_URL.key -> HIVE_URL.defaultValue,
-      HIVE_PARTITION_FIELDS.key -> HIVE_PARTITION_FIELDS.defaultValue,
-      HIVE_PARTITION_EXTRACTOR_CLASS.key -> HIVE_PARTITION_EXTRACTOR_CLASS.defaultValue,
-      HIVE_STYLE_PARTITIONING.key -> HIVE_STYLE_PARTITIONING.defaultValue,
-      HIVE_USE_JDBC.key -> HIVE_USE_JDBC.defaultValue,
-      HIVE_CREATE_MANAGED_TABLE.key() -> HIVE_CREATE_MANAGED_TABLE.defaultValue.toString,
-      HIVE_SYNC_AS_DATA_SOURCE_TABLE.key() -> HIVE_SYNC_AS_DATA_SOURCE_TABLE.defaultValue(),
-      ASYNC_COMPACT_ENABLE.key -> ASYNC_COMPACT_ENABLE.defaultValue,
-      INLINE_CLUSTERING_ENABLE.key -> INLINE_CLUSTERING_ENABLE.defaultValue,
-      ASYNC_CLUSTERING_ENABLE.key -> ASYNC_CLUSTERING_ENABLE.defaultValue,
-      ENABLE_ROW_WRITER.key -> ENABLE_ROW_WRITER.defaultValue,
-      RECONCILE_SCHEMA.key -> RECONCILE_SCHEMA.defaultValue.toString,
-      DROP_PARTITION_COLUMNS.key -> DROP_PARTITION_COLUMNS.defaultValue,
-      HIVE_SYNC_USE_KERBEROS.key -> HIVE_SYNC_USE_KERBEROS.defaultValue,
-      HIVE_SYNC_KERBEROS_PRINCIPAL.key -> HIVE_SYNC_KERBEROS_PRINCIPAL.defaultValue
-    ) ++ DataSourceOptionsHelper.translateConfigurations(parameters)
-
     val globalProps = DFSPropertiesConfiguration.getGlobalProps.asScala
     val props = new Properties()
     props.putAll(parameters)
@@ -123,6 +85,8 @@ object HoodieWriterUtils {
     hoodieConfig.setDefaultValue(RECONCILE_SCHEMA)
     hoodieConfig.setDefaultValue(DROP_PARTITION_COLUMNS)
     hoodieConfig.setDefaultValue(KEYGENERATOR_CONSISTENT_LOGICAL_TIMESTAMP_ENABLED)
+    hoodieConfig.setDefaultValue(HIVE_SYNC_USE_KERBEROS)
+    hoodieConfig.setDefaultValue(HIVE_SYNC_KERBEROS_PRINCIPAL)
     Map() ++ hoodieConfig.getProps.asScala ++ globalProps ++ DataSourceOptionsHelper.translateConfigurations(parameters)
   }
 
