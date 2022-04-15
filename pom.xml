@@ -47,17 +47,17 @@
     <module>packaging/hudi-hadoop-mr-bundle</module>
     <module>packaging/hudi-hive-sync-bundle</module>
     <module>packaging/hudi-spark-bundle</module>
-    <module>packaging/hudi-presto-bundle</module>
+<!--    <module>packaging/hudi-presto-bundle</module>-->
     <module>packaging/hudi-utilities-bundle</module>
     <module>packaging/hudi-timeline-server-bundle</module>
-    <module>docker/hoodie/hadoop</module>
-    <module>hudi-integ-test</module>
-    <module>packaging/hudi-integ-test-bundle</module>
+<!--    <module>docker/hoodie/hadoop</module>-->
+<!--    <module>hudi-integ-test</module>-->
+<!--    <module>packaging/hudi-integ-test-bundle</module>-->
     <module>hudi-examples</module>
     <module>hudi-flink</module>
-    <module>hudi-kafka-connect</module>
+<!--    <module>hudi-kafka-connect</module>-->
     <module>packaging/hudi-flink-bundle</module>
-    <module>packaging/hudi-kafka-connect-bundle</module>
+<!--    <module>packaging/hudi-kafka-connect-bundle</module>-->
   </modules>
 
   <licenses>
@@ -144,10 +144,10 @@
     <skipDocker>${skipTests}</skipDocker>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <main.basedir>${project.basedir}</main.basedir>
-    <spark.bundle.hive.scope>provided</spark.bundle.hive.scope>
-    <spark.bundle.hive.shade.prefix />
-    <spark.bundle.avro.scope>compile</spark.bundle.avro.scope>
-    <spark.bundle.spark.shade.prefix>org.apache.hudi.spark.</spark.bundle.spark.shade.prefix>
+<!--    <spark.bundle.hive.scope>provided</spark.bundle.hive.scope>-->
+<!--    <spark.bundle.hive.shade.prefix />-->
+<!--    <spark.bundle.avro.scope>compile</spark.bundle.avro.scope>-->
+<!--    <spark.bundle.spark.shade.prefix>org.apache.hudi.spark.</spark.bundle.spark.shade.prefix>-->
     <utilities.bundle.hive.scope>provided</utilities.bundle.hive.scope>
     <utilities.bundle.hive.shade.prefix />
     <argLine>-Xmx2g</argLine>
@@ -1654,4 +1654,19 @@
     </profile>
   </profiles>
 
+  <!-- 构件管理 -->
+  <distributionManagement>
+    <!-- release仓库 -->
+    <repository>
+      <id>xqy-releases</id>
+      <name>Nexus Release Repository</name>
+      <url>http://maven.dc.servyou-it.com/nexus/content/repositories/xqy/</url>
+    </repository>
+    <!-- snapshot仓库 版本尾缀为-SNAPSHOT的组件会从该地址上传或下载 -->
+    <snapshotRepository>
+      <id>xqy-snapshots</id>
+      <name>Nexus Snapshot Repository</name>
+      <url>http://maven.dc.servyou-it.com/nexus/content/repositories/xiaoyiqe-test/</url>
+    </snapshotRepository>
+  </distributionManagement>
 </project>

@@ -34,7 +34,7 @@ import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.hadoop.hive.metastore.IMetaStoreClient;
 import org.apache.hadoop.hive.metastore.TableType;
 import org.apache.hadoop.hive.metastore.api.Database;
-import org.apache.hadoop.hive.metastore.api.EnvironmentContext;
+// import org.apache.hadoop.hive.metastore.api.EnvironmentContext;
 import org.apache.hadoop.hive.metastore.api.FieldSchema;
 import org.apache.hadoop.hive.metastore.api.MetaException;
 import org.apache.hadoop.hive.metastore.api.Partition;
@@ -139,7 +139,7 @@ public class HMSDDLExecutor implements DDLExecutor {
       StorageDescriptor sd = table.getSd();
       sd.setCols(fieldSchema);
       table.setSd(sd);
-      EnvironmentContext environmentContext = new EnvironmentContext();
+      // EnvironmentContext environmentContext = new EnvironmentContext();
       if (cascade) {
         LOG.info("partition table,need cascade");
         // environmentContext.putToProperties(StatsSetupConst.CASCADE, StatsSetupConst.TRUE);
