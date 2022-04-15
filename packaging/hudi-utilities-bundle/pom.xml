@@ -296,12 +296,12 @@
       <scope>${utilities.bundle.hive.scope}</scope>
     </dependency>
 
-    <dependency>
-      <groupId>${hive.groupid}</groupId>
-      <artifactId>hive-service-rpc</artifactId>
-      <version>${hive.version}</version>
-      <scope>${utilities.bundle.hive.scope}</scope>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>${hive.groupid}</groupId>-->
+<!--      <artifactId>hive-service-rpc</artifactId>-->
+<!--      <version>${hive.version}</version>-->
+<!--      <scope>${utilities.bundle.hive.scope}</scope>-->
+<!--    </dependency>-->
 
     <dependency>
       <groupId>${hive.groupid}</groupId>
