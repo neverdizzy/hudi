@@ -29,14 +29,9 @@
   <properties>
     <checkstyle.skip>true</checkstyle.skip>
     <main.basedir>${project.parent.basedir}</main.basedir>
-    <javax.servlet.version>3.1.0</javax.servlet.version>
     <hive.version>1.1.0-cdh5.16.1</hive.version>
-<!--    <thrift.version>0.9.3</thrift.version>-->
-    <parquet.version>1.11.1</parquet.version>
     <spark.bundle.hive.scope>compile</spark.bundle.hive.scope>
     <spark.bundle.hive.shade.prefix>org.apache.hudi.</spark.bundle.hive.shade.prefix>
-<!--    <spark.bundle.hive.scope>provided</spark.bundle.hive.scope>-->
-<!--    <spark.bundle.hive.shade.prefix />-->
     <spark.bundle.avro.scope>compile</spark.bundle.avro.scope>
     <spark.bundle.spark.shade.prefix>org.apache.hudi.spark.</spark.bundle.spark.shade.prefix>
   </properties>
@@ -100,12 +95,6 @@
 
                   <!-- Parquet -->
                   <include>org.apache.parquet:parquet-avro</include>
-                  <include>org.apache.parquet:parquet-hadoop</include>
-                  <include>org.apache.parquet:parquet-column</include>
-                  <include>org.apache.parquet:parquet-common</include>
-                  <include>org.apache.parquet:parquet-format-structures</include>
-                  <include>org.apache.parquet:parquet-encoding</include>
-                  <include>org.apache.parquet:parquet-jackson</include>
 
                   <include>com.github.davidmoten:guava-mini</include>
                   <include>com.github.davidmoten:hilbert-curve</include>
@@ -122,8 +111,6 @@
                   <include>com.yammer.metrics:metrics-core</include>
                   <include>com.google.guava:guava</include>
 
-		          <!-- Used for HUDI write handle -->
-                  <inclide>com.esotericsoftware:kryo-shaded</inclide>
                   <include>org.apache.spark:spark-avro_${scala.binary.version}</include>
 <!--                  <include>org.apache.hive:hive-common</include>-->
 <!--                  <include>org.apache.hive:hive-service</include>-->
@@ -131,10 +118,10 @@
 <!--                  <include>org.apache.hive:hive-exec</include>-->
 <!--                  <include>org.apache.hive:hive-metastore</include>-->
 <!--                  <include>org.apache.hive:hive-jdbc</include>-->
-                  <include>org.datanucleus:datanucleus-core</include>
-                  <include>org.datanucleus:datanucleus-api-jdo</include>
-                  <include>org.apache.thrift:libfb303</include>
-                  <include>org.apache.orc:orc-core</include>
+<!--                  <include>org.datanucleus:datanucleus-core</include>-->
+<!--                  <include>org.datanucleus:datanucleus-api-jdo</include>-->
+<!--                  <include>org.apache.thrift:libfb303</include>-->
+<!--                  <include>org.apache.orc:orc-core</include>-->
 
                   <include>org.apache.hbase:hbase-client</include>
                   <include>org.apache.hbase:hbase-common</include>
@@ -157,12 +144,12 @@
                   <shadedPattern>org.apache.hudi.com.beust.jcommander.</shadedPattern>
                 </relocation>
                 <relocation>
-                  <pattern>org.apache.spark.sql.avro.</pattern>
-                  <shadedPattern>${spark.bundle.spark.shade.prefix}org.apache.spark.sql.avro.</shadedPattern>
+                  <pattern>org.apache.commons.io.</pattern>
+                  <shadedPattern>org.apache.hudi.org.apache.commons.io.</shadedPattern>
                 </relocation>
                 <relocation>
-                  <pattern>org.apache.parquet.</pattern>
-                  <shadedPattern>${spark.bundle.spark.shade.prefix}org.apache.parquet.</shadedPattern>
+                  <pattern>org.apache.spark.sql.avro.</pattern>
+                  <shadedPattern>${spark.bundle.spark.shade.prefix}org.apache.spark.sql.avro.</shadedPattern>
                 </relocation>
 <!--                <relocation>-->
 <!--                  <pattern>org.apache.hive.jdbc.</pattern>-->
@@ -218,6 +205,8 @@
                     <exclude>META-INF/*.DSA</exclude>
                     <exclude>META-INF/*.RSA</exclude>
                     <exclude>META-INF/services/javax.*</exclude>
+                    <exclude>**/*.proto</exclude>
+                    <exclude>hbase-webapps/**</exclude>
                   </excludes>
                 </filter>
               </filters>
@@ -243,27 +232,27 @@
       <groupId>org.apache.hudi</groupId>
       <artifactId>hudi-common</artifactId>
       <version>${project.version}</version>
-      <exclusions>
-        <exclusion>
-          <artifactId>guava</artifactId>
-          <groupId>com.google.guava</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>rocksdbjni</artifactId>
-          <groupId>org.rocksdb</groupId>
-        </exclusion>
-      </exclusions>
+<!--      <exclusions>-->
+<!--        <exclusion>-->
+<!--          <artifactId>guava</artifactId>-->
+<!--          <groupId>com.google.guava</groupId>-->
+<!--        </exclusion>-->
+<!--        <exclusion>-->
+<!--          <artifactId>rocksdbjni</artifactId>-->
+<!--          <groupId>org.rocksdb</groupId>-->
+<!--        </exclusion>-->
+<!--      </exclusions>-->
     </dependency>
     <dependency>
       <groupId>org.apache.hudi</groupId>
       <artifactId>hudi-client-common</artifactId>
       <version>${project.version}</version>
-      <exclusions>
-        <exclusion>
-          <artifactId>guava</artifactId>
-          <groupId>com.google.guava</groupId>
-        </exclusion>
-      </exclusions>
+<!--      <exclusions>-->
+<!--        <exclusion>-->
+<!--          <artifactId>guava</artifactId>-->
+<!--          <groupId>com.google.guava</groupId>-->
+<!--        </exclusion>-->
+<!--      </exclusions>-->
     </dependency>
     <dependency>
       <groupId>org.apache.hudi</groupId>
@@ -299,12 +288,12 @@
       <groupId>org.apache.hudi</groupId>
       <artifactId>hudi-timeline-service</artifactId>
       <version>${project.version}</version>
-      <exclusions>
-        <exclusion>
-          <artifactId>rocksdbjni</artifactId>
-          <groupId>org.rocksdb</groupId>
-        </exclusion>
-      </exclusions>
+<!--      <exclusions>-->
+<!--        <exclusion>-->
+<!--          <artifactId>rocksdbjni</artifactId>-->
+<!--          <groupId>org.rocksdb</groupId>-->
+<!--        </exclusion>-->
+<!--      </exclusions>-->
     </dependency>
 
     <!-- Spark (Packages) -->
@@ -315,69 +304,9 @@
     </dependency>
 
     <!-- Parquet -->
-<!--    <dependency>-->
-<!--      <groupId>org.apache.parquet</groupId>-->
-<!--      <artifactId>parquet-avro</artifactId>-->
-<!--      <scope>compile</scope>-->
-<!--    </dependency>-->
-
-    <!-- Parquet -->
-    <dependency>
-      <groupId>org.apache.parquet</groupId>
-      <artifactId>parquet-hadoop</artifactId>
-      <version>${parquet.version}</version>
-      <scope>compile</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>org.xerial.snappy</groupId>
-          <artifactId>snappy-java</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
     <dependency>
       <groupId>org.apache.parquet</groupId>
       <artifactId>parquet-avro</artifactId>
-      <version>${parquet.version}</version>
-      <scope>compile</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>org.apache.hadoop</groupId>
-          <artifactId>hadoop-client</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>it.unimi.dsi</groupId>
-          <artifactId>fastutil</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.parquet</groupId>
-      <artifactId>parquet-column</artifactId>
-      <version>${parquet.version}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.parquet</groupId>
-      <artifactId>parquet-common</artifactId>
-      <version>${parquet.version}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.parquet</groupId>
-      <artifactId>parquet-encoding</artifactId>
-      <version>${parquet.version}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.parquet</groupId>
-      <artifactId>parquet-format-structures</artifactId>
-      <version>${parquet.version}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.parquet</groupId>
-      <artifactId>parquet-jackson</artifactId>
-      <version>${parquet.version}</version>
       <scope>compile</scope>
     </dependency>
 
@@ -468,24 +397,24 @@
         </exclusion>
       </exclusions>
     </dependency>
-    <dependency>
-      <groupId>org.datanucleus</groupId>
-      <artifactId>datanucleus-core</artifactId>
-      <scope>${spark.bundle.hive.scope}</scope>
-      <version>5.0.1</version>
-    </dependency>
-    <dependency>
-      <groupId>org.datanucleus</groupId>
-      <artifactId>datanucleus-api-jdo</artifactId>
-      <scope>${spark.bundle.hive.scope}</scope>
-      <version>5.0.1</version>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>org.datanucleus</groupId>-->
+<!--      <artifactId>datanucleus-core</artifactId>-->
+<!--      <scope>${spark.bundle.hive.scope}</scope>-->
+<!--      <version>5.0.1</version>-->
+<!--    </dependency>-->
+<!--    <dependency>-->
+<!--      <groupId>org.datanucleus</groupId>-->
+<!--      <artifactId>datanucleus-api-jdo</artifactId>-->
+<!--      <scope>${spark.bundle.hive.scope}</scope>-->
+<!--      <version>5.0.1</version>-->
+<!--    </dependency>-->
 
-    <dependency>
-      <groupId>joda-time</groupId>
-      <artifactId>joda-time</artifactId>
-      <scope>compile</scope>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>joda-time</groupId>-->
+<!--      <artifactId>joda-time</artifactId>-->
+<!--      <scope>compile</scope>-->
+<!--    </dependency>-->
 
 <!--    <dependency>-->
 <!--      <groupId>org.apache.thrift</groupId>-->
@@ -500,39 +429,6 @@
 <!--      <version>${htrace.version}</version>-->
 <!--      <scope>compile</scope>-->
 <!--    </dependency>-->
-
-    <!-- kryo -->
-    <dependency>
-      <groupId>com.esotericsoftware</groupId>
-      <artifactId>kryo-shaded</artifactId>
-      <version>4.0.2</version>
-    </dependency>
-
-    <!-- ORC -->
-    <dependency>
-      <groupId>org.apache.orc</groupId>
-      <artifactId>orc-core</artifactId>
-      <version>${orc.version}</version>
-      <classifier>nohive</classifier>
-      <scope>${spark.bundle.hive.scope}</scope>
-    </dependency>
-
-    <!-- Fasterxml -->
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-core</artifactId>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-annotations</artifactId>
-      <scope>compile</scope>
-    </dependency>
 
     <!-- Hbase -->
     <dependency>
@@ -605,36 +501,18 @@
       <groupId>org.apache.curator</groupId>
       <artifactId>curator-framework</artifactId>
       <version>${zk-curator.version}</version>
-      <exclusions>
-        <exclusion>
-          <artifactId>guava</artifactId>
-          <groupId>com.google.guava</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
     <dependency>
       <groupId>org.apache.curator</groupId>
       <artifactId>curator-client</artifactId>
       <version>${zk-curator.version}</version>
-      <exclusions>
-        <exclusion>
-          <artifactId>guava</artifactId>
-          <groupId>com.google.guava</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
     <dependency>
       <groupId>org.apache.curator</groupId>
       <artifactId>curator-recipes</artifactId>
       <version>${zk-curator.version}</version>
-      <exclusions>
-        <exclusion>
-          <artifactId>guava</artifactId>
-          <groupId>com.google.guava</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <!-- TODO: Reinvestigate PR 633 -->
   </dependencies>
@@ -644,7 +522,6 @@
       <id>spark-bundle-shade-hive</id>
       <properties>
         <hive.version>1.1.0-cdh5.16.1</hive.version>
-<!--        <thrift.version>0.9.3</thrift.version>-->
         <spark.bundle.hive.scope>compile</spark.bundle.hive.scope>
         <spark.bundle.hive.shade.prefix>org.apache.hudi.</spark.bundle.hive.shade.prefix>
       </properties>
