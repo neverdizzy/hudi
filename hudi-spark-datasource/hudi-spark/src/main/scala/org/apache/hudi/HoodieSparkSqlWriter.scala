@@ -490,7 +490,9 @@ object HoodieSparkSqlWriter {
     val metaSyncEnabled = hoodieConfig.getStringOrDefault(META_SYNC_ENABLED).toBoolean
     val syncHiveSuccess =
       if (hiveSyncEnabled || metaSyncEnabled) {
-        metaSync(sqlContext.sparkSession, hoodieConfig, basePath, df.schema)
+        // bulkInsertAsRow 取消sync hive
+//        metaSync(sqlContext.sparkSession, hoodieConfig, basePath, df.schema)
+        true
     } else {
       true
     }
@@ -663,8 +665,10 @@ object HoodieSparkSqlWriter {
 
       log.info(s"Clustering Scheduled is $clusteringInstant")
 
-      val metaSyncSuccess = metaSync(spark, HoodieWriterUtils.convertMapToHoodieConfig(parameters),
-        tableInstantInfo.basePath, schema)
+      // commitAndPerformPostOperations 取消sync hive
+//      val metaSyncSuccess = metaSync(spark, HoodieWriterUtils.convertMapToHoodieConfig(parameters),
+//        tableInstantInfo.basePath, schema)
+      val metaSyncSuccess = true
 
       log.info(s"Is Async Compaction Enabled ? $asyncCompactionEnabled")
       if (!asyncCompactionEnabled && !asyncClusteringEnabled) {
