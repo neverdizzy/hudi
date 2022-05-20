@@ -18,6 +18,7 @@
 
 package org.apache.hudi.util;
 
+import org.apache.avro.Conversions;
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericRecord;
@@ -33,6 +34,7 @@ import org.apache.flink.table.types.logical.LogicalType;
 import org.apache.flink.table.types.logical.RowType;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,6 +49,7 @@ import java.util.Map;
 @Internal
 public class RowDataToAvroConverters {
 
+    private static Conversions.DecimalConversion decimalConversion = new Conversions.DecimalConversion();
   // --------------------------------------------------------------------------------
   // Runtime Converters
   // --------------------------------------------------------------------------------
@@ -168,7 +171,8 @@ public class RowDataToAvroConverters {
 
               @Override
               public Object convert(Schema schema, Object object) {
-                return ByteBuffer.wrap(((DecimalData) object).toUnscaledBytes());
+                  BigDecimal javaDecimal = ((DecimalData) object).toBigDecimal();
+                  return decimalConversion.toFixed(javaDecimal, schema, schema.getLogicalType());
               }
             };
         break;
