@@ -18,6 +18,7 @@
 
 package org.apache.hudi.common.config;
 
+import org.apache.hudi.common.util.StringUtils;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
@@ -67,7 +68,9 @@ public class TypedProperties extends Properties implements Serializable {
     if (!keyExists(property)) {
       return defaultVal;
     }
-    return Arrays.stream(getProperty(property).split(delimiter)).map(String::trim).collect(Collectors.toList());
+    // return Arrays.stream(getProperty(property).split(delimiter)).map(String::trim).collect(Collectors.toList());
+    // [HUDI-4099][MINOR]fix hive sync no partition table error #5585
+    return Arrays.stream(getProperty(property).split(delimiter)).map(String::trim).filter(s -> !StringUtils.isNullOrEmpty(s)).collect(Collectors.toList());
   }
 
   public int getInteger(String property) {
