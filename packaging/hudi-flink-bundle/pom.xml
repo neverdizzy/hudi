@@ -38,6 +38,7 @@
     <parquet.version>1.11.1</parquet.version>
     <hive.version>2.3.1</hive.version>
     <thrift.version>0.9.3</thrift.version>
+    <hbase.version>1.2.3</hbase.version>
   </properties>
 
   <build>
@@ -618,6 +619,7 @@
         <hive.version>1.1.0-cdh5.16.1</hive.version>
         <thrift.version>0.9.3</thrift.version>
         <flink.bundle.hive.scope>compile</flink.bundle.hive.scope>
+        <hbase.version>1.2.0-cdh5.16.1</hbase.version>
       </properties>
       <activation>
         <activeByDefault>true</activeByDefault>
