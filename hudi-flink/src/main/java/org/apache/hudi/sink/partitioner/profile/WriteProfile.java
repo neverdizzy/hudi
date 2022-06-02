@@ -249,7 +249,13 @@ public class WriteProfile {
       return;
     }
     this.metaClient.reloadActiveTimeline();
-    this.fsView.sync();
+    // this.fsView.sync();
+    // release the old fs view and create a new one
+    // [HUDI-4129] Initializes a new fs view for WriteProfile#reload #5640
+    SyncableFileSystemView oldFsView = this.fsView;
+    this.fsView = getFileSystemView();
+    oldFsView.close();
+
     recordProfile();
     cleanMetadataCache(this.metaClient.getCommitsTimeline().filterCompletedInstants().getInstants());
     this.smallFilesMap.clear();
