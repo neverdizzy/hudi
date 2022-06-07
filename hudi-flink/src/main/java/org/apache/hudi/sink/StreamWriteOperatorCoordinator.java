@@ -361,8 +361,8 @@ public class StreamWriteOperatorCoordinator
       startInstant();
       // upgrade downgrade
       // [HUDI-4130] Remove the upgrade/downgrade for flink #initTable #5642
-      this.writeClient.upgradeDowngrade(this.instant, this.metaClient);
-      // this.writeClient.upgradeDowngrade(this.instant);
+      // this.writeClient.upgradeDowngrade(this.instant, this.metaClient);
+      this.writeClient.upgradeDowngrade(this.instant);
     }, "initialize instant %s", instant);
   }
 
