@@ -79,7 +79,8 @@ public class Pipelines {
       }
     }
     return dataStream
-        .transform("hoodie_bulk_insert_write",
+        // .transform("hoodie_bulk_insert_write",
+           .transform(writeOpIdentifier("hoodie_bulk_insert_write", conf),
             TypeInformation.of(Object.class),
             operatorFactory)
         // follow the parallelism of upstream operators to avoid shuffle
@@ -92,7 +93,8 @@ public class Pipelines {
     WriteOperatorFactory<RowData> operatorFactory = AppendWriteOperator.getFactory(conf, rowType);
 
     return dataStream
-        .transform("hoodie_append_write", TypeInformation.of(Object.class), operatorFactory)
+        // .transform("hoodie_append_write", TypeInformation.of(Object.class), operatorFactory)
+        .transform(writeOpIdentifier("hoodie_append_write", conf), TypeInformation.of(Object.class), operatorFactory)
         .uid("uid_hoodie_stream_write" + conf.getString(FlinkOptions.TABLE_NAME))
         .setParallelism(conf.getInteger(FlinkOptions.WRITE_TASKS))
         .addSink(DummySink.INSTANCE)
@@ -194,7 +196,8 @@ public class Pipelines {
         .setParallelism(conf.getOptional(FlinkOptions.BUCKET_ASSIGN_TASKS).orElse(defaultParallelism))
         // shuffle by fileId(bucket id)
         .keyBy(record -> record.getCurrentLocation().getFileId())
-        .transform("hoodie_stream_write", TypeInformation.of(Object.class), operatorFactory)
+        // .transform("hoodie_stream_write", TypeInformation.of(Object.class), operatorFactory)
+        .transform(writeOpIdentifier("stream_write", conf), TypeInformation.of(Object.class), operatorFactory)
         .uid("uid_hoodie_stream_write" + conf.getString(FlinkOptions.TABLE_NAME))
         .setParallelism(conf.getInteger(FlinkOptions.WRITE_TASKS));
   }
@@ -218,6 +221,10 @@ public class Pipelines {
     return dataStream.addSink(new CleanFunction<>(conf))
         .setParallelism(1)
         .name("clean_commits");
+  }
+
+  public static String writeOpIdentifier(String operatorN, Configuration conf) {
+    return operatorN + ": " + conf.getString(FlinkOptions.TABLE_NAME);
   }
 
   /**
