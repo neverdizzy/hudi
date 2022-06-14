@@ -211,7 +211,9 @@ public abstract class AbstractHoodieWriteClient<T extends HoodieRecordPayload, I
       if (null == commitCallback) {
         commitCallback = HoodieCommitCallbackFactory.create(config);
       }
-      commitCallback.call(new HoodieWriteCommitCallbackMessage(instantTime, config.getTableName(), config.getBasePath(), stats));
+      // 20220614 回调暂不需要hoodieWriteStat信息，防止is_cargo表一次修改几千张表清空，太多无用信息
+      commitCallback.call(new HoodieWriteCommitCallbackMessage(instantTime, config.getTableName(), config.getBasePath(), null));
+      // commitCallback.call(new HoodieWriteCommitCallbackMessage(instantTime, config.getTableName(), config.getBasePath(), stats));
     }
     return true;
   }

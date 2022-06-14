@@ -231,7 +231,12 @@
       <version>${zk-curator.version}</version>
       <scope>test</scope>
     </dependency>
-
+    <!-- Kafka -->
+    <dependency>
+      <groupId>org.apache.kafka</groupId>
+      <artifactId>kafka-clients</artifactId>
+      <version>${kafka.version}</version>
+    </dependency>
   </dependencies>
 
   <build>
