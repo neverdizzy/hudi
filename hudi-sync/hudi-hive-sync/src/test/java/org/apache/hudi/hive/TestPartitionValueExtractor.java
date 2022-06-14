@@ -46,4 +46,15 @@ public class TestPartitionValueExtractor {
         IllegalArgumentException.class,
         () -> hiveStylePartition.extractPartitionValuesInPath("2021/04/02"));
   }
+
+  @Test
+  public void testHiveStyleMultiPartition() {
+    HiveStyleMultiPartitionValueExtractor hiveStylePartition = new HiveStyleMultiPartitionValueExtractor();
+    List<String> list = new ArrayList<>();
+    list.add("1");
+    list.add("202206");
+    System.out.println(hiveStylePartition.extractPartitionValuesInPath("invoice_type=1/pt_m=202206"));
+    assertEquals(hiveStylePartition.extractPartitionValuesInPath("invoice_type=1/pt_m=202206"), list);
+
+  }
 }
