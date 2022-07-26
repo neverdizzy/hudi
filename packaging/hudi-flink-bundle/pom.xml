@@ -144,8 +144,9 @@
                   <include>org.datanucleus:datanucleus-api-jdo</include>
                   <include>org.apache.thrift:libfb303</include>
                   <include>org.apache.orc:orc-core</include>
-                  <include>org.apache.flink:flink-sql-connector-hive-2.3.6_${scala.binary.version}</include>
-
+<!--                  <include>org.apache.flink:flink-sql-connector-hive-2.3.6_${scala.binary.version}</include>-->
+<!--                  flink-sql-connector-hive-1.2.2_2.11-1.13.2.jar-->
+                  <include>org.apache.flink:flink-sql-connector-hive-1.2.2_${scala.binary.version}</include>
                   <include>org.apache.hbase:hbase-common</include>
                   <include>org.apache.hbase:hbase-client</include>
                   <include>org.apache.hbase:hbase-server</include>
