@@ -115,7 +115,7 @@ public class HiveTestService {
     serverConf = configureHive(hadoopConf, localHiveLocation);
 
     executorService = Executors.newSingleThreadExecutor();
-    tServer = startMetaStore(bindIP, serverConf);
+    // tServer = startMetaStore(bindIP, serverConf);
 
     serverConf.set("hive.in.test", "true");
     hiveServer = startHiveServer(serverConf);
@@ -174,11 +174,11 @@ public class HiveTestService {
   public HiveConf configureHive(Configuration conf, String localHiveLocation) throws IOException {
     conf.set("hive.metastore.local", "false");
     int port = metastorePort;
-    if (conf.get(HiveConf.ConfVars.METASTORE_SERVER_PORT.varname, null) == null) {
-      conf.setInt(ConfVars.METASTORE_SERVER_PORT.varname, metastorePort);
-    } else {
-      port = conf.getInt(ConfVars.METASTORE_SERVER_PORT.varname, metastorePort);
-    }
+    // if (conf.get(HiveConf.ConfVars.METASTORE_SERVER_PORT.varname, null) == null) {
+    //   conf.setInt(ConfVars.METASTORE_SERVER_PORT.varname, metastorePort);
+    // } else {
+    //   port = conf.getInt(ConfVars.METASTORE_SERVER_PORT.varname, metastorePort);
+    // }
     if (conf.get(HiveConf.ConfVars.HIVE_SERVER2_THRIFT_PORT.varname, null) == null) {
       conf.setInt(ConfVars.HIVE_SERVER2_THRIFT_PORT.varname, serverPort);
     }
@@ -211,14 +211,14 @@ public class HiveTestService {
 
   private boolean waitForServerUp(HiveConf serverConf, String hostname, int timeout) {
     long start = System.currentTimeMillis();
-    int port = serverConf.getIntVar(HiveConf.ConfVars.METASTORE_SERVER_PORT);
+    // int port = serverConf.getIntVar(HiveConf.ConfVars.METASTORE_SERVER_PORT);
     while (true) {
       try {
         new HiveMetaStoreClient(serverConf);
         return true;
       } catch (MetaException e) {
         // ignore as this is expected
-        LOG.info("server " + hostname + ":" + port + " not up " + e);
+        // LOG.info("server " + hostname + ":" + port + " not up " + e);
       }
 
       if (System.currentTimeMillis() > start + timeout) {
@@ -307,57 +307,57 @@ public class HiveTestService {
     }
   }
 
-  public TServer startMetaStore(String forceBindIP, HiveConf conf) throws IOException {
-    try {
-      // Server will create new threads up to max as necessary. After an idle
-      // period, it will destory threads to keep the number of threads in the
-      // pool to min.
-      int port = conf.getIntVar(HiveConf.ConfVars.METASTORE_SERVER_PORT);
-      int minWorkerThreads = conf.getIntVar(HiveConf.ConfVars.METASTORESERVERMINTHREADS);
-      int maxWorkerThreads = conf.getIntVar(HiveConf.ConfVars.METASTORESERVERMAXTHREADS);
-      boolean tcpKeepAlive = conf.getBoolVar(HiveConf.ConfVars.METASTORE_TCP_KEEP_ALIVE);
-      boolean useFramedTransport = conf.getBoolVar(HiveConf.ConfVars.METASTORE_USE_THRIFT_FRAMED_TRANSPORT);
-
-      // don't support SASL yet
-      // boolean useSasl = conf.getBoolVar(HiveConf.ConfVars.METASTORE_USE_THRIFT_SASL);
-
-      TServerTransport serverTransport;
-      if (forceBindIP != null) {
-        InetSocketAddress address = new InetSocketAddress(forceBindIP, port);
-        serverTransport = tcpKeepAlive ? new TServerSocketKeepAlive(address) : new TServerSocket(address);
-
-      } else {
-        serverTransport = tcpKeepAlive ? new TServerSocketKeepAlive(port) : new TServerSocket(port);
-      }
-
-      TProcessor processor;
-      TTransportFactory transFactory;
-
-      HiveMetaStore.HMSHandler baseHandler = new HiveMetaStore.HMSHandler("new db based metaserver", conf, false);
-      IHMSHandler handler = RetryingHMSHandler.getProxy(conf, baseHandler, true);
-
-      if (conf.getBoolVar(HiveConf.ConfVars.METASTORE_EXECUTE_SET_UGI)) {
-        transFactory = useFramedTransport
-            ? new ChainedTTransportFactory(new TFramedTransport.Factory(), new TUGIContainingTransport.Factory())
-            : new TUGIContainingTransport.Factory();
-
-        processor = new TUGIBasedProcessor<>(handler);
-        LOG.info("Starting DB backed MetaStore Server with SetUGI enabled");
-      } else {
-        transFactory = useFramedTransport ? new TFramedTransport.Factory() : new TTransportFactory();
-        processor = new TSetIpAddressProcessor<>(handler);
-        LOG.info("Starting DB backed MetaStore Server");
-      }
-
-      TThreadPoolServer.Args args = new TThreadPoolServer.Args(serverTransport).processor(processor)
-          .transportFactory(transFactory).protocolFactory(new TBinaryProtocol.Factory())
-          .minWorkerThreads(minWorkerThreads).maxWorkerThreads(maxWorkerThreads);
-
-      final TServer tServer = new TThreadPoolServer(args);
-      executorService.submit(tServer::serve);
-      return tServer;
-    } catch (Throwable x) {
-      throw new IOException(x);
-    }
-  }
+  // public TServer startMetaStore(String forceBindIP, HiveConf conf) throws IOException {
+  //   try {
+  //     // Server will create new threads up to max as necessary. After an idle
+  //     // period, it will destory threads to keep the number of threads in the
+  //     // pool to min.
+  //     // int port = conf.getIntVar(HiveConf.ConfVars.METASTORE_SERVER_PORT);
+  //     int minWorkerThreads = conf.getIntVar(HiveConf.ConfVars.METASTORESERVERMINTHREADS);
+  //     int maxWorkerThreads = conf.getIntVar(HiveConf.ConfVars.METASTORESERVERMAXTHREADS);
+  //     boolean tcpKeepAlive = conf.getBoolVar(HiveConf.ConfVars.METASTORE_TCP_KEEP_ALIVE);
+  //     boolean useFramedTransport = conf.getBoolVar(HiveConf.ConfVars.METASTORE_USE_THRIFT_FRAMED_TRANSPORT);
+  //
+  //     // don't support SASL yet
+  //     // boolean useSasl = conf.getBoolVar(HiveConf.ConfVars.METASTORE_USE_THRIFT_SASL);
+  //
+  //     TServerTransport serverTransport;
+  //     if (forceBindIP != null) {
+  //       // InetSocketAddress address = new InetSocketAddress(forceBindIP, port);
+  //       serverTransport = tcpKeepAlive ? new TServerSocketKeepAlive(address) : new TServerSocket(address);
+  //
+  //     } else {
+  //       serverTransport = tcpKeepAlive ? new TServerSocketKeepAlive(port) : new TServerSocket(port);
+  //     }
+  //
+  //     TProcessor processor;
+  //     TTransportFactory transFactory;
+  //
+  //     HiveMetaStore.HMSHandler baseHandler = new HiveMetaStore.HMSHandler("new db based metaserver", conf, false);
+  //     IHMSHandler handler = RetryingHMSHandler.getProxy(conf, baseHandler, true);
+  //
+  //     if (conf.getBoolVar(HiveConf.ConfVars.METASTORE_EXECUTE_SET_UGI)) {
+  //       transFactory = useFramedTransport
+  //           ? new ChainedTTransportFactory(new TFramedTransport.Factory(), new TUGIContainingTransport.Factory())
+  //           : new TUGIContainingTransport.Factory();
+  //
+  //       processor = new TUGIBasedProcessor<>(handler);
+  //       LOG.info("Starting DB backed MetaStore Server with SetUGI enabled");
+  //     } else {
+  //       transFactory = useFramedTransport ? new TFramedTransport.Factory() : new TTransportFactory();
+  //       processor = new TSetIpAddressProcessor<>(handler);
+  //       LOG.info("Starting DB backed MetaStore Server");
+  //     }
+  //
+  //     TThreadPoolServer.Args args = new TThreadPoolServer.Args(serverTransport).processor(processor)
+  //         .transportFactory(transFactory).protocolFactory(new TBinaryProtocol.Factory())
+  //         .minWorkerThreads(minWorkerThreads).maxWorkerThreads(maxWorkerThreads);
+  //
+  //     final TServer tServer = new TThreadPoolServer(args);
+  //     executorService.submit(tServer::serve);
+  //     return tServer;
+  //   } catch (Throwable x) {
+  //     throw new IOException(x);
+  //   }
+  // }
 }
