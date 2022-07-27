@@ -478,6 +478,7 @@ public class StreamWriteFunction<I> extends AbstractStreamWriteFunction<I> {
     this.eventGateway.sendEventToCoordinator(event);
     this.buckets.clear();
     this.tracer.reset();
+    // this.writeClient.cleanHandles();
     this.writeClient.cleanHandles();
     this.writeStatuses.addAll(writeStatus);
     // blocks flushing until the coordinator starts a new instant

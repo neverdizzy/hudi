@@ -53,9 +53,9 @@ public class HiveSyncContext {
 
   public HiveSyncTool hiveSyncTool() {
     HiveSyncMode syncMode = HiveSyncMode.of(syncConfig.syncMode);
-    if (syncMode == HiveSyncMode.GLUE) {
-      return new AwsGlueCatalogSyncTool(this.syncConfig, this.hiveConf, this.fs);
-    }
+    // if (syncMode == HiveSyncMode.GLUE) {
+    //   return new AwsGlueCatalogSyncTool(this.syncConfig, this.hiveConf, this.fs);
+    // }
     return new HiveSyncTool(this.syncConfig, this.hiveConf, this.fs);
   }
 
