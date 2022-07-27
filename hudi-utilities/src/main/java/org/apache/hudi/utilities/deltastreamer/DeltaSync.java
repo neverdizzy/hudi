@@ -64,7 +64,7 @@ import org.apache.hudi.sync.common.util.SyncUtilHelpers;
 import org.apache.hudi.utilities.UtilHelpers;
 import org.apache.hudi.utilities.callback.kafka.HoodieWriteCommitKafkaCallback;
 import org.apache.hudi.utilities.callback.kafka.HoodieWriteCommitKafkaCallbackConfig;
-import org.apache.hudi.utilities.callback.pulsar.HoodieWriteCommitPulsarCallback;
+// import org.apache.hudi.utilities.callback.pulsar.HoodieWriteCommitPulsarCallback;
 import org.apache.hudi.utilities.callback.pulsar.HoodieWriteCommitPulsarCallbackConfig;
 import org.apache.hudi.utilities.deltastreamer.HoodieDeltaStreamer.Config;
 import org.apache.hudi.utilities.exception.HoodieDeltaStreamerException;
@@ -808,9 +808,9 @@ public class DeltaSync implements Serializable {
       }
 
       // set default value for {@link HoodieWriteCommitPulsarCallbackConfig} if needed.
-      if (HoodieWriteCommitPulsarCallback.class.getName().equals(config.getCallbackClass())) {
-        HoodieWriteCommitPulsarCallbackConfig.setCallbackPulsarConfigIfNeeded(config);
-      }
+      // if (HoodieWriteCommitPulsarCallback.class.getName().equals(config.getCallbackClass())) {
+      //   HoodieWriteCommitPulsarCallbackConfig.setCallbackPulsarConfigIfNeeded(config);
+      // }
     }
 
     HoodieClusteringConfig clusteringConfig = HoodieClusteringConfig.from(props);
