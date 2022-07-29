@@ -142,13 +142,13 @@
                   <include>org.apache.hive:hive-service</include>
                   <include>org.apache.hive:hive-service-rpc</include>
 		          <include>org.apache.hive:hive-exec</include>
-<!--                  <include>org.apache.hive:hive-standalone-metastore</include>-->
                   <include>org.apache.hive:hive-metastore</include>
                   <include>org.apache.hive:hive-jdbc</include>
                   <include>org.datanucleus:datanucleus-core</include>
                   <include>org.datanucleus:datanucleus-api-jdo</include>
                   <include>org.apache.thrift:libfb303</include>
                   <include>org.apache.orc:orc-core</include>
+                  <include>org.apache.flink:flink-sql-connector-hive-1.2.2_${scala.binary.version}</include>
 
                   <include>org.apache.hbase:hbase-common</include>
                   <include>org.apache.hbase:hbase-client</include>
@@ -172,7 +172,7 @@
                   <pattern>javax.servlet.</pattern>
                   <shadedPattern>${flink.bundle.shade.prefix}javax.servlet.</shadedPattern>
                 </relocation>
-                <relocation>
+                <relocation>org.apache.thrift.transport.TIOStreamTransport.read
                   <pattern>org.apache.avro.</pattern>
                   <shadedPattern>${flink.bundle.shade.prefix}org.apache.avro.</shadedPattern>
                 </relocation>
