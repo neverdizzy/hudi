@@ -19,7 +19,6 @@
 package org.apache.hudi.sink.utils;
 
 import org.apache.flink.annotation.VisibleForTesting;
-import org.apache.hudi.aws.sync.AwsGlueCatalogSyncTool;
 import org.apache.hudi.common.config.SerializableConfiguration;
 import org.apache.hudi.common.fs.FSUtils;
 import org.apache.hudi.configuration.FlinkOptions;
