@@ -26,7 +26,6 @@ import org.apache.flink.table.planner.plan.nodes.exec.spec.SortSpec;
 import org.apache.flink.table.types.logical.RowType;
 
 import java.util.Arrays;
-import java.util.stream.IntStream;
 
 /**
  * Tools to generate the sort operator.
