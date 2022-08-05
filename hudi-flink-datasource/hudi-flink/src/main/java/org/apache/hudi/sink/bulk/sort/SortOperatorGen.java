@@ -50,7 +50,9 @@ public class SortOperatorGen {
 
   private SortCodeGenerator createSortCodeGenerator() {
     SortSpec.SortSpecBuilder builder = SortSpec.builder();
-    IntStream.range(0, sortIndices.length).forEach(i -> builder.addField(i, true, true));
+    for (int sortIndex : sortIndices) {
+      builder.addField(sortIndex, true, true);
+    }
     return new SortCodeGenerator(tableConfig, rowType, builder.build());
   }
 }
