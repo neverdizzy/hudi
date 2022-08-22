@@ -119,8 +119,8 @@ public class HiveTestCluster implements BeforeAllCallback, AfterAllCallback, Bef
     try (OutputStream os = new FileOutputStream(hiveSiteXml)) {
       conf.writeXml(os);
     }
-    client = HiveMetaStoreClient.newSynchronizedClient(
-        RetryingMetaStoreClient.getProxy(conf, true));
+    // client = HiveMetaStoreClient.newSynchronizedClient(
+    //     RetryingMetaStoreClient.getProxy(conf, true));
   }
 
   public String getHiveSiteXmlLocation() {
