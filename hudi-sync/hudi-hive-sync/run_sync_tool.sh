@@ -31,11 +31,17 @@ fi
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 #Ensure we pick the right jar even for hive11 builds
-HUDI_HIVE_UBER_JAR=`ls -c $DIR/../../packaging/hudi-hive-sync-bundle/target/hudi-hive-sync-*.jar | grep -v source | head -1`
+#HUDI_HIVE_UBER_JAR=`ls -c $DIR/../../packaging/hudi-hive-sync-bundle/target/hudi-hive-sync-*.jar | grep -v source | head -1`
+HUDI_HIVE_UBER_JAR=`ls -c /opt/flink-1.14.3/lib/hudi-flink1.14-bundle.jar | grep -v source | head -1`
 
-if [ -z "$HADOOP_CONF_DIR" ]; then
-  echo "setting hadoop conf dir"
-  HADOOP_CONF_DIR="${HADOOP_HOME}/etc/hadoop"
+#if [ -z "$HADOOP_CONF_DIR" ]; then
+#  echo "setting hadoop conf dir"
+#  HADOOP_CONF_DIR="${HADOOP_HOME}/etc/hadoop"
+#fi
+
+if [ -z "$HIVE_CONF_DIR" ]; then
+  echo "setting hive conf dir"
+  HADOOP_CONF_DIR="${HIVE_HOME}/conf"
 fi
 
 ## Include only specific packages from HIVE_HOME/lib to avoid version mismatches
@@ -49,7 +55,8 @@ fi
 HIVE_JACKSON=`ls ${HIVE_HOME}/lib/jackson-*.jar | tr '\n' ':'`
 HIVE_JARS=$HIVE_METASTORE:$HIVE_SERVICE:$HIVE_EXEC:$HIVE_JDBC:$HIVE_JACKSON
 
-HADOOP_HIVE_JARS=${HIVE_JARS}:${HADOOP_HOME}/share/hadoop/common/*:${HADOOP_HOME}/share/hadoop/mapreduce/*:${HADOOP_HOME}/share/hadoop/hdfs/*:${HADOOP_HOME}/share/hadoop/common/lib/*:${HADOOP_HOME}/share/hadoop/hdfs/lib/*
+#HADOOP_HIVE_JARS=${HIVE_JARS}:${HADOOP_HOME}/share/hadoop/common/*:${HADOOP_HOME}/share/hadoop/mapreduce/*:${HADOOP_HOME}/share/hadoop/hdfs/*:${HADOOP_HOME}/share/hadoop/common/lib/*:${HADOOP_HOME}/share/hadoop/hdfs/lib/*
+HADOOP_HIVE_JARS=${HIVE_JARS}:${HADOOP_HOME}/*:${HADOOP_HOME}/lib/*:/opt/cloudera/parcels/CDH-5.16.1-1.cdh5.16.1.p0.3/lib/hadoop-mapreduce/*:/opt/cloudera/parcels/CDH-5.16.1-1.cdh5.16.1.p0.3/lib/hadoop-hdfs/*:/opt/cloudera/parcels/CDH-5.16.1-1.cdh5.16.1.p0.3/lib/hadoop-hdfs/lib/*
 
 echo "Running Command : java -cp ${HADOOP_HIVE_JARS}:${HADOOP_CONF_DIR}:$HUDI_HIVE_UBER_JAR org.apache.hudi.hive.HiveSyncTool $@"
 java -cp $HUDI_HIVE_UBER_JAR:${HADOOP_HIVE_JARS}:${HADOOP_CONF_DIR} org.apache.hudi.hive.HiveSyncTool "$@"
