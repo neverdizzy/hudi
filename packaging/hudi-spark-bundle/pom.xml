@@ -124,9 +124,9 @@
 <!--                  <include>org.apache.hbase:hbase-hadoop2-compat</include>-->
 <!--                  <include>org.apache.hbase:hbase-metrics</include>-->
 <!--                  <include>org.apache.hbase:hbase-metrics-api</include>-->
-<!--                  <include>org.apache.hbase:hbase-protocol</include>-->
+                  <include>org.apache.hbase:hbase-protocol</include>
 <!--                  <include>org.apache.hbase:hbase-protocol-shaded</include>-->
-<!--                  <include>org.apache.hbase:hbase-server</include>-->
+                  <include>org.apache.hbase:hbase-server</include>
 <!--                  <include>org.apache.hbase.thirdparty:hbase-shaded-miscellaneous</include>-->
 <!--                  <include>org.apache.hbase.thirdparty:hbase-shaded-netty</include>-->
 <!--                  <include>org.apache.hbase.thirdparty:hbase-shaded-protobuf</include>-->
@@ -448,6 +448,7 @@
       <id>spark-bundle-shade-hive</id>
       <properties>
         <hive.version>1.1.0-cdh5.16.1</hive.version>
+        <hbase.version>1.2.0-cdh5.16.1</hbase.version>
         <spark.bundle.hive.scope>compile</spark.bundle.hive.scope>
         <spark.bundle.hive.shade.prefix>org.apache.hudi.</spark.bundle.hive.shade.prefix>
       </properties>
