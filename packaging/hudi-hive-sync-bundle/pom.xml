@@ -251,4 +251,16 @@
     </dependency>
 
   </dependencies>
+
+  <profiles>
+    <profile>
+      <id>hive-bundle-shade-hive1</id>
+      <properties>
+        <hive.version>1.1.0-cdh5.16.1</hive.version>
+      </properties>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+    </profile>
+  </profiles>
 </project>

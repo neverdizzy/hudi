@@ -46,21 +46,21 @@
     <module>hudi-utilities</module>
     <module>hudi-sync</module>
     <module>packaging/hudi-hadoop-mr-bundle</module>
-    <module>packaging/hudi-datahub-sync-bundle</module>
+<!--    <module>packaging/hudi-datahub-sync-bundle</module>-->
     <module>packaging/hudi-hive-sync-bundle</module>
-    <module>packaging/hudi-aws-bundle</module>
-    <module>packaging/hudi-gcp-bundle</module>
+<!--    <module>packaging/hudi-aws-bundle</module>-->
+<!--    <module>packaging/hudi-gcp-bundle</module>-->
     <module>packaging/hudi-spark-bundle</module>
-    <module>packaging/hudi-presto-bundle</module>
+<!--    <module>packaging/hudi-presto-bundle</module>-->
     <module>packaging/hudi-utilities-bundle</module>
     <module>packaging/hudi-utilities-slim-bundle</module>
-    <module>packaging/hudi-timeline-server-bundle</module>
-    <module>packaging/hudi-trino-bundle</module>
+<!--    <module>packaging/hudi-timeline-server-bundle</module>-->
+<!--    <module>packaging/hudi-trino-bundle</module>-->
     <module>hudi-examples</module>
     <module>hudi-flink-datasource</module>
-    <module>hudi-kafka-connect</module>
+<!--    <module>hudi-kafka-connect</module>-->
     <module>packaging/hudi-flink-bundle</module>
-    <module>packaging/hudi-kafka-connect-bundle</module>
+<!--    <module>packaging/hudi-kafka-connect-bundle</module>-->
     <module>hudi-tests-common</module>
   </modules>
 
@@ -132,7 +132,7 @@
     <spark3.version>3.3.0</spark3.version>
     <sparkbundle.version></sparkbundle.version>
     <flink1.15.version>1.15.1</flink1.15.version>
-    <flink1.14.version>1.14.5</flink1.14.version>
+    <flink1.14.version>1.14.3</flink1.14.version>
     <flink1.13.version>1.13.6</flink1.13.version>
     <flink.version>${flink1.15.version}</flink.version>
     <hudi.flink.module>hudi-flink1.15.x</hudi.flink.module>
@@ -371,49 +371,49 @@
           <useSystemClassLoader>false</useSystemClassLoader>
         </configuration>
       </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-enforcer-plugin</artifactId>
-        <version>${maven-enforcer-plugin.version}</version>
-        <executions>
-          <execution>
-            <id>enforce-logging</id>
-            <goals>
-              <goal>enforce</goal>
-            </goals>
-            <configuration>
-              <rules>
-                <bannedDependencies>
-                  <excludes>
-                    <exclude>org.slf4j:slf4j-log4j12</exclude>
-                    <exclude>org.sl4fj:slf4j-simple</exclude>
-                    <exclude>org.sl4fj:slf4j-jdk14</exclude>
-                    <exclude>org.sl4fj:slf4j-nop</exclude>
-                    <exclude>org.sl4fj:slf4j-jcl</exclude>
-                    <exclude>log4j:log4j</exclude>
-                    <exclude>ch.qos.logback:logback-classic</exclude>
-                    <!-- NOTE: We're banning any HBase deps versions other than the approved ${hbase.version},
-                               which is aimed at preventing the classpath collisions w/ transitive deps usually) -->
-                    <exclude>org.apache.hbase:hbase-common:*</exclude>
-                    <exclude>org.apache.hbase:hbase-client:*</exclude>
-                    <exclude>org.apache.hbase:hbase-server:*</exclude>
-                    <!--To upgrade snappy because pre 1.1.8.2 does not work on m1 mac-->
-                    <exclude>org.xerial.snappy:snappy-java:*</exclude>
-                  </excludes>
-                  <includes>
-                    <include>org.slf4j:slf4j-simple:*:*:test</include>
-                    <include>org.apache.hbase:hbase-common:${hbase.version}</include>
-                    <include>org.apache.hbase:hbase-client:${hbase.version}</include>
-                    <include>org.apache.hbase:hbase-server:${hbase.version}</include>
-                    <!--To upgrade snappy because pre 1.1.8.2 does not work on m1 mac-->
-                    <include>org.xerial.snappy:snappy-java:${snappy.version}</include>
-                  </includes>
-                </bannedDependencies>
-              </rules>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
+<!--      <plugin>-->
+<!--        <groupId>org.apache.maven.plugins</groupId>-->
+<!--        <artifactId>maven-enforcer-plugin</artifactId>-->
+<!--        <version>${maven-enforcer-plugin.version}</version>-->
+<!--        <executions>-->
+<!--          <execution>-->
+<!--            <id>enforce-logging</id>-->
+<!--            <goals>-->
+<!--              <goal>enforce</goal>-->
+<!--            </goals>-->
+<!--            <configuration>-->
+<!--              <rules>-->
+<!--                <bannedDependencies>-->
+<!--                  <excludes>-->
+<!--                    <exclude>org.slf4j:slf4j-log4j12</exclude>-->
+<!--                    <exclude>org.sl4fj:slf4j-simple</exclude>-->
+<!--                    <exclude>org.sl4fj:slf4j-jdk14</exclude>-->
+<!--                    <exclude>org.sl4fj:slf4j-nop</exclude>-->
+<!--                    <exclude>org.sl4fj:slf4j-jcl</exclude>-->
+<!--                    <exclude>log4j:log4j</exclude>-->
+<!--                    <exclude>ch.qos.logback:logback-classic</exclude>-->
+<!--                    &lt;!&ndash; NOTE: We're banning any HBase deps versions other than the approved ${hbase.version},-->
+<!--                               which is aimed at preventing the classpath collisions w/ transitive deps usually) &ndash;&gt;-->
+<!--                    <exclude>org.apache.hbase:hbase-common:*</exclude>-->
+<!--                    <exclude>org.apache.hbase:hbase-client:*</exclude>-->
+<!--                    <exclude>org.apache.hbase:hbase-server:*</exclude>-->
+<!--                    &lt;!&ndash;To upgrade snappy because pre 1.1.8.2 does not work on m1 mac&ndash;&gt;-->
+<!--                    <exclude>org.xerial.snappy:snappy-java:*</exclude>-->
+<!--                  </excludes>-->
+<!--                  <includes>-->
+<!--                    <include>org.slf4j:slf4j-simple:*:*:test</include>-->
+<!--                    <include>org.apache.hbase:hbase-common:${hbase.version}</include>-->
+<!--                    <include>org.apache.hbase:hbase-client:${hbase.version}</include>-->
+<!--                    <include>org.apache.hbase:hbase-server:${hbase.version}</include>-->
+<!--                    &lt;!&ndash;To upgrade snappy because pre 1.1.8.2 does not work on m1 mac&ndash;&gt;-->
+<!--                    <include>org.xerial.snappy:snappy-java:${snappy.version}</include>-->
+<!--                  </includes>-->
+<!--                </bannedDependencies>-->
+<!--              </rules>-->
+<!--            </configuration>-->
+<!--          </execution>-->
+<!--        </executions>-->
+<!--      </plugin>-->
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
@@ -1416,17 +1416,17 @@
         </exclusions>
       </dependency>
 
-      <dependency>
-        <groupId>com.facebook.presto</groupId>
-        <artifactId>presto-jdbc</artifactId>
-        <version>${presto.version}</version>
-      </dependency>
+<!--      <dependency>-->
+<!--        <groupId>com.facebook.presto</groupId>-->
+<!--        <artifactId>presto-jdbc</artifactId>-->
+<!--        <version>${presto.version}</version>-->
+<!--      </dependency>-->
 
-      <dependency>
-        <groupId>io.trino</groupId>
-        <artifactId>trino-jdbc</artifactId>
-        <version>${trino.version}</version>
-      </dependency>
+<!--      <dependency>-->
+<!--        <groupId>io.trino</groupId>-->
+<!--        <artifactId>trino-jdbc</artifactId>-->
+<!--        <version>${trino.version}</version>-->
+<!--      </dependency>-->
 
       <!-- Zookeeper -->
       <dependency>
@@ -1581,6 +1581,28 @@
     </dependencies>
   </dependencyManagement>
   <repositories>
+    <repository>
+      <id>alimaven</id>
+      <name>aliyun maven</name>
+      <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>alimaven-spring</id>
+      <name>aliyun maven</name>
+      <url>https://maven.aliyun.com/repository/spring</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
     <repository>
       <id>Maven Central</id>
       <name>Maven Repository</name>
@@ -2264,6 +2286,7 @@
         <flink.hadoop.compatibility.artifactId>flink-hadoop-compatibility_${scala.binary.version}</flink.hadoop.compatibility.artifactId>
       </properties>
       <activation>
+        <activeByDefault>true</activeByDefault>
         <property>
           <name>flink1.14</name>
         </property>
