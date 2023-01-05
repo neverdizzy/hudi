@@ -23,7 +23,6 @@ import org.apache.hudi.common.fs.FSUtils;
 import org.apache.hudi.common.model.HoodieTableType;
 import org.apache.hudi.common.table.HoodieTableMetaClient;
 import org.apache.hudi.common.table.TableSchemaResolver;
-import org.apache.hudi.common.table.timeline.HoodieDefaultTimeline;
 import org.apache.hudi.common.table.timeline.HoodieTimeline;
 import org.apache.hudi.common.table.timeline.TimelineUtils;
 import org.apache.hudi.common.util.Option;
@@ -89,10 +88,9 @@ public abstract class HoodieSyncClient implements HoodieMetaSyncOperations, Auto
    * Going through archive timeline is a costly operation, and it should be avoided unless some start time is given.
    */
   public Set<String> getDroppedPartitionsSince(Option<String> lastCommitTimeSynced) {
-    HoodieTimeline timeline = lastCommitTimeSynced.isPresent() ? metaClient.getArchivedTimeline(lastCommitTimeSynced.get())
-        .mergeTimeline(metaClient.getActiveTimeline())
-        .getCommitsTimeline()
-        .findInstantsAfter(lastCommitTimeSynced.get(), Integer.MAX_VALUE) : metaClient.getActiveTimeline();
+    HoodieTimeline timeline = lastCommitTimeSynced.isPresent()
+        ? TimelineUtils.getCommitsTimelineAfter(metaClient, lastCommitTimeSynced.get())
+        : metaClient.getActiveTimeline();
     return new HashSet<>(TimelineUtils.getDroppedPartitions(timeline));
   }
 
@@ -126,10 +124,8 @@ public abstract class HoodieSyncClient implements HoodieMetaSyncOperations, Auto
           config.getBoolean(META_SYNC_ASSUME_DATE_PARTITION));
     } else {
       LOG.info("Last commit time synced is " + lastCommitTimeSynced.get() + ", Getting commits since then");
-      final HoodieDefaultTimeline timeline = metaClient.getActiveTimeline().isBeforeTimelineStarts(lastCommitTimeSynced.get())
-              ? metaClient.getArchivedTimeline(lastCommitTimeSynced.get()).mergeTimeline(metaClient.getActiveTimeline())
-              : metaClient.getActiveTimeline();
-      return TimelineUtils.getWrittenPartitions(timeline.getCommitsTimeline().findInstantsAfter(lastCommitTimeSynced.get(), Integer.MAX_VALUE));
+      return TimelineUtils.getWrittenPartitions(
+          TimelineUtils.getCommitsTimelineAfter(metaClient, lastCommitTimeSynced.get()));
     }
   }
 
