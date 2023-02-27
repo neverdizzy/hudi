@@ -526,7 +526,9 @@ object HoodieSparkSqlWriter {
       } finally {
         writeClient.close()
       }
-      val metaSyncSuccess = metaSync(sqlContext.sparkSession, hoodieConfig, basePath, df.schema)
+      // bootstrap 取消sync hive
+      // val metaSyncSuccess = metaSync(sqlContext.sparkSession, hoodieConfig, basePath, df.schema)
+      val metaSyncSuccess = true
       metaSyncSuccess
     }
   }
@@ -610,7 +612,9 @@ object HoodieSparkSqlWriter {
       throw new HoodieException("Bulk insert using row writer is not supported with current Spark version."
         + " To use row writer please switch to spark 2 or spark 3")
     }
-    val syncHiveSuccess = metaSync(sqlContext.sparkSession, writeConfig, basePath, df.schema)
+    // bulkInsertAsRow 取消sync hive
+    // val syncHiveSuccess = metaSync(sqlContext.sparkSession, writeConfig, basePath, df.schema)
+    val syncHiveSuccess = true
     (syncHiveSuccess, common.util.Option.ofNullable(instantTime))
   }
 
@@ -755,8 +759,10 @@ object HoodieSparkSqlWriter {
 
       log.info(s"Clustering Scheduled is $clusteringInstant")
 
-      val metaSyncSuccess = metaSync(spark, HoodieWriterUtils.convertMapToHoodieConfig(parameters),
-        tableInstantInfo.basePath, schema)
+      // commitAndPerformPostOperations 取消sync hive
+      // val metaSyncSuccess = metaSync(spark, HoodieWriterUtils.convertMapToHoodieConfig(parameters),
+      //  tableInstantInfo.basePath, schema)
+      val metaSyncSuccess = true
 
       log.info(s"Is Async Compaction Enabled ? $asyncCompactionEnabled")
       (commitSuccess && metaSyncSuccess, compactionInstant, clusteringInstant)
