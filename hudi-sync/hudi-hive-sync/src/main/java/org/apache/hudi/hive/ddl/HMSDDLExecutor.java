@@ -29,11 +29,11 @@ import org.apache.hudi.hive.util.HiveSchemaUtil;
 import org.apache.hudi.sync.common.model.PartitionValueExtractor;
 
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.hive.common.StatsSetupConst;
+// import org.apache.hadoop.hive.common.StatsSetupConst;
 import org.apache.hadoop.hive.metastore.IMetaStoreClient;
 import org.apache.hadoop.hive.metastore.TableType;
 import org.apache.hadoop.hive.metastore.api.Database;
-import org.apache.hadoop.hive.metastore.api.EnvironmentContext;
+// import org.apache.hadoop.hive.metastore.api.EnvironmentContext;
 import org.apache.hadoop.hive.metastore.api.FieldSchema;
 import org.apache.hadoop.hive.metastore.api.MetaException;
 import org.apache.hadoop.hive.metastore.api.Partition;
@@ -150,12 +150,13 @@ public class HMSDDLExecutor implements DDLExecutor {
       StorageDescriptor sd = table.getSd();
       sd.setCols(fieldSchema);
       table.setSd(sd);
-      EnvironmentContext environmentContext = new EnvironmentContext();
+      // EnvironmentContext environmentContext = new EnvironmentContext();
       if (cascade) {
         LOG.info("partition table,need cascade");
-        environmentContext.putToProperties(StatsSetupConst.CASCADE, StatsSetupConst.TRUE);
+        // environmentContext.putToProperties(StatsSetupConst.CASCADE, StatsSetupConst.TRUE);
       }
-      client.alter_table_with_environmentContext(databaseName, tableName, table, environmentContext);
+      // client.alter_table_with_environmentContext(databaseName, tableName, table, environmentContext);
+      client.alter_table(databaseName, tableName, table, cascade);
     } catch (Exception e) {
       LOG.error("Failed to update table for " + tableName, e);
       throw new HoodieHiveSyncException("Failed to update table for " + tableName, e);
@@ -237,7 +238,8 @@ public class HMSDDLExecutor implements DDLExecutor {
         partitionSd.setLocation(fullPartitionPath);
         return new Partition(partitionValues, databaseName, tableName, 0, 0, partitionSd, null);
       }).collect(Collectors.toList());
-      client.alter_partitions(databaseName, tableName, partitionList, null);
+      // client.alter_partitions(databaseName, tableName, partitionList, null);
+      client.alter_partitions(databaseName, tableName, partitionList);
     } catch (TException e) {
       LOG.error(databaseName + "." + tableName + " update partition failed", e);
       throw new HoodieHiveSyncException(databaseName + "." + tableName + " update partition failed", e);
@@ -279,8 +281,9 @@ public class HMSDDLExecutor implements DDLExecutor {
         }
       }
       table.setSd(sd);
-      EnvironmentContext environmentContext = new EnvironmentContext();
-      client.alter_table_with_environmentContext(databaseName, tableName, table, environmentContext);
+      // EnvironmentContext environmentContext = new EnvironmentContext();
+      // client.alter_table_with_environmentContext(databaseName, tableName, table, environmentContext);
+      client.alter_table(databaseName, tableName, table);
       sd.clear();
     } catch (Exception e) {
       LOG.error("Failed to update table comments for " + tableName, e);

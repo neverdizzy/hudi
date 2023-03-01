@@ -29,6 +29,7 @@
   <properties>
     <checkstyle.skip>true</checkstyle.skip>
     <main.basedir>${project.parent.basedir}</main.basedir>
+    <hive.version>1.1.0-cdh5.16.1</hive.version>
     <skipTests>true</skipTests>
     <javax.servlet.version>3.1.0</javax.servlet.version>
   </properties>
@@ -108,11 +109,11 @@
                   <include>io.prometheus:simpleclient_common</include>
                   <include>com.yammer.metrics:metrics-core</include>
 
-                  <include>org.apache.hive:hive-common</include>
-                  <include>org.apache.hive:hive-service</include>
-                  <include>org.apache.hive:hive-service-rpc</include>
-                  <include>org.apache.hive:hive-metastore</include>
-                  <include>org.apache.hive:hive-jdbc</include>
+<!--                  <include>org.apache.hive:hive-common</include>-->
+<!--                  <include>org.apache.hive:hive-service</include>-->
+<!--                  <include>org.apache.hive:hive-service-rpc</include>-->
+<!--                  <include>org.apache.hive:hive-metastore</include>-->
+<!--                  <include>org.apache.hive:hive-jdbc</include>-->
 
                   <include>org.apache.hbase:hbase-client</include>
                   <include>org.apache.hbase:hbase-common</include>
@@ -160,34 +161,34 @@
                   <shadedPattern>org.apache.hudi.org.apache.commons.io.</shadedPattern>
                 </relocation>
                 <!-- TODO: clean up hive dep - Revisit GH ISSUE #533 & PR#633-->
-                <relocation>
-                  <pattern>org.apache.hive.jdbc.</pattern>
-                  <shadedPattern>${spark.bundle.hive.shade.prefix}org.apache.hive.jdbc.</shadedPattern>
-                </relocation>
-                <relocation>
-                  <pattern>org.apache.hadoop.hive.metastore.</pattern>
-                  <shadedPattern>${spark.bundle.hive.shade.prefix}org.apache.hadoop.hive.metastore.</shadedPattern>
-                </relocation>
-                <relocation>
-                  <pattern>org.apache.hive.common.</pattern>
-                  <shadedPattern>${spark.bundle.hive.shade.prefix}org.apache.hive.common.</shadedPattern>
-                </relocation>
-                <relocation>
-                  <pattern>org.apache.hadoop.hive.common.</pattern>
-                  <shadedPattern>${spark.bundle.hive.shade.prefix}org.apache.hadoop.hive.common.</shadedPattern>
-                </relocation>
-                <relocation>
-                  <pattern>org.apache.hadoop.hive.conf.</pattern>
-                  <shadedPattern>${spark.bundle.hive.shade.prefix}org.apache.hadoop.hive.conf.</shadedPattern>
-                </relocation>
-                <relocation>
-                  <pattern>org.apache.hive.service.</pattern>
-                  <shadedPattern>${spark.bundle.hive.shade.prefix}org.apache.hive.service.</shadedPattern>
-                </relocation>
-                <relocation>
-                  <pattern>org.apache.hadoop.hive.service.</pattern>
-                  <shadedPattern>${spark.bundle.hive.shade.prefix}org.apache.hadoop.hive.service.</shadedPattern>
-                </relocation>
+<!--                <relocation>-->
+<!--                  <pattern>org.apache.hive.jdbc.</pattern>-->
+<!--                  <shadedPattern>${spark.bundle.hive.shade.prefix}org.apache.hive.jdbc.</shadedPattern>-->
+<!--                </relocation>-->
+<!--                <relocation>-->
+<!--                  <pattern>org.apache.hadoop.hive.metastore.</pattern>-->
+<!--                  <shadedPattern>${spark.bundle.hive.shade.prefix}org.apache.hadoop.hive.metastore.</shadedPattern>-->
+<!--                </relocation>-->
+<!--                <relocation>-->
+<!--                  <pattern>org.apache.hive.common.</pattern>-->
+<!--                  <shadedPattern>${spark.bundle.hive.shade.prefix}org.apache.hive.common.</shadedPattern>-->
+<!--                </relocation>-->
+<!--                <relocation>-->
+<!--                  <pattern>org.apache.hadoop.hive.common.</pattern>-->
+<!--                  <shadedPattern>${spark.bundle.hive.shade.prefix}org.apache.hadoop.hive.common.</shadedPattern>-->
+<!--                </relocation>-->
+<!--                <relocation>-->
+<!--                  <pattern>org.apache.hadoop.hive.conf.</pattern>-->
+<!--                  <shadedPattern>${spark.bundle.hive.shade.prefix}org.apache.hadoop.hive.conf.</shadedPattern>-->
+<!--                </relocation>-->
+<!--                <relocation>-->
+<!--                  <pattern>org.apache.hive.service.</pattern>-->
+<!--                  <shadedPattern>${spark.bundle.hive.shade.prefix}org.apache.hive.service.</shadedPattern>-->
+<!--                </relocation>-->
+<!--                <relocation>-->
+<!--                  <pattern>org.apache.hadoop.hive.service.</pattern>-->
+<!--                  <shadedPattern>${spark.bundle.hive.shade.prefix}org.apache.hadoop.hive.service.</shadedPattern>-->
+<!--                </relocation>-->
                 <relocation>
                   <pattern>com.codahale.metrics.</pattern>
                   <shadedPattern>org.apache.hudi.com.codahale.metrics.</shadedPattern>
@@ -291,12 +292,12 @@
       </exclusions>
     </dependency>
 
-    <dependency>
-      <groupId>${hive.groupid}</groupId>
-      <artifactId>hive-service-rpc</artifactId>
-      <version>${hive.version}</version>
-      <scope>${spark.bundle.hive.scope}</scope>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>${hive.groupid}</groupId>-->
+<!--      <artifactId>hive-service-rpc</artifactId>-->
+<!--      <version>${hive.version}</version>-->
+<!--      <scope>${spark.bundle.hive.scope}</scope>-->
+<!--    </dependency>-->
 
     <dependency>
       <groupId>${hive.groupid}</groupId>
@@ -351,9 +352,14 @@
     <profile>
       <id>spark-bundle-shade-hive</id>
       <properties>
+        <hive.version>1.1.0-cdh5.16.1</hive.version>
+<!--        <hbase.version>1.2.0-cdh5.16.1</hbase.version>-->
         <spark.bundle.hive.scope>compile</spark.bundle.hive.scope>
         <spark.bundle.hive.shade.prefix>org.apache.hudi.</spark.bundle.hive.shade.prefix>
       </properties>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
     </profile>
   </profiles>
 </project>
