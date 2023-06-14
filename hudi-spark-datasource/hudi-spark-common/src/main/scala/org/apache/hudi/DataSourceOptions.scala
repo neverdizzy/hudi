@@ -158,7 +158,7 @@ object DataSourceReadOptions {
 
   val FILE_INDEX_LISTING_MODE_OVERRIDE: ConfigProperty[String] =
     ConfigProperty.key("hoodie.datasource.read.file.index.listing.mode")
-      .defaultValue(FILE_INDEX_LISTING_MODE_LAZY)
+      .defaultValue(FILE_INDEX_LISTING_MODE_EAGER)
       .withValidValues(FILE_INDEX_LISTING_MODE_LAZY, FILE_INDEX_LISTING_MODE_EAGER)
       .sinceVersion("0.13.0")
       .withDocumentation("Overrides Hudi's file-index implementation's file listing mode: when set to 'eager'," +
