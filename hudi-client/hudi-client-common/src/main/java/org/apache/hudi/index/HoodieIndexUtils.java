@@ -22,6 +22,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hudi.common.engine.HoodieEngineContext;
 import org.apache.hudi.common.fs.FSUtils;
+import org.apache.hudi.common.model.FileSlice;
 import org.apache.hudi.common.model.HoodieBaseFile;
 import org.apache.hudi.common.model.HoodieRecord;
 import org.apache.hudi.common.model.HoodieRecordLocation;
@@ -59,15 +60,34 @@ public class HoodieIndexUtils {
    * @param hoodieTable Instance of {@link HoodieTable} of interest
    * @return the list of {@link HoodieBaseFile}
    */
-  public static List<HoodieBaseFile> getLatestBaseFilesForPartition(
-      final String partition,
-      final HoodieTable hoodieTable) {
+  public static List<HoodieBaseFile> getLatestBaseFilesForPartition(String partition,
+                                                                    HoodieTable hoodieTable) {
     Option<HoodieInstant> latestCommitTime = hoodieTable.getMetaClient().getCommitsTimeline()
         .filterCompletedInstants().lastInstant();
     if (latestCommitTime.isPresent()) {
       return hoodieTable.getBaseFileOnlyView()
           .getLatestBaseFilesBeforeOrOn(partition, latestCommitTime.get().getTimestamp())
           .collect(toList());
+    }
+    return Collections.emptyList();
+  }
+
+  /**
+   * Fetches Pair of partition path and {@link FileSlice}s for interested partitions.
+   *
+   * @param partition   Partition of interest
+   * @param hoodieTable Instance of {@link HoodieTable} of interest
+   * @return the list of {@link FileSlice}
+   */
+  public static List<FileSlice> getLatestFileSlicesForPartition(
+          final String partition,
+          final HoodieTable hoodieTable) {
+    Option<HoodieInstant> latestCommitTime = hoodieTable.getMetaClient().getCommitsTimeline()
+            .filterCompletedInstants().lastInstant();
+    if (latestCommitTime.isPresent()) {
+      return hoodieTable.getHoodieView()
+              .getLatestFileSlicesBeforeOrOn(partition, latestCommitTime.get().getTimestamp(), true)
+              .collect(toList());
     }
     return Collections.emptyList();
   }
@@ -92,6 +112,30 @@ public class HoodieIndexUtils {
 
       return filteredFiles.stream();
     }, Math.max(partitions.size(), 1));
+  }
+
+  /**
+   * Get tagged record for the passed in {@link HoodieRecord}.
+   *
+   * @param record   instance of {@link HoodieRecord} for which tagging is requested
+   * @param location {@link HoodieRecordLocation} for the passed in {@link HoodieRecord}
+   * @return the tagged {@link HoodieRecord}
+   */
+  public static <R> HoodieRecord<R> tagAsNewRecordIfNeeded(HoodieRecord<R> record, Option<HoodieRecordLocation> location) {
+    if (location.isPresent()) {
+      // When you have a record in multiple files in the same partition, then <row key, record> collection
+      // will have 2 entries with the same exact in memory copy of the HoodieRecord and the 2
+      // separate filenames that the record is found in. This will result in setting
+      // currentLocation 2 times and it will fail the second time. So creating a new in memory
+      // copy of the hoodie record.
+      HoodieRecord<R> newRecord = record.newInstance();
+      newRecord.unseal();
+      newRecord.setCurrentLocation(location.get());
+      newRecord.seal();
+      return newRecord;
+    } else {
+      return record;
+    }
   }
 
   /**

@@ -19,14 +19,12 @@
 package org.apache.hudi.index.bucket;
 
 import org.apache.hudi.client.WriteStatus;
+import org.apache.hudi.client.utils.LazyIterableIterator;
 import org.apache.hudi.common.data.HoodieData;
 import org.apache.hudi.common.engine.HoodieEngineContext;
 import org.apache.hudi.common.fs.FSUtils;
 import org.apache.hudi.common.fs.HoodieWrapperFileSystem;
-import org.apache.hudi.common.model.ConsistentHashingNode;
-import org.apache.hudi.common.model.HoodieConsistentHashingMetadata;
-import org.apache.hudi.common.model.HoodieKey;
-import org.apache.hudi.common.model.HoodieRecordLocation;
+import org.apache.hudi.common.model.*;
 import org.apache.hudi.common.table.timeline.HoodieTimeline;
 import org.apache.hudi.common.util.FileIOUtils;
 import org.apache.hudi.common.util.Option;
@@ -43,12 +41,15 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import static org.apache.hudi.index.HoodieIndexUtils.tagAsNewRecordIfNeeded;
 
 /**
  * Consistent hashing bucket index implementation, with auto-adjust bucket number.
@@ -82,8 +83,25 @@ public class HoodieSparkConsistentBucketIndex extends HoodieBucketIndex {
   }
 
   @Override
-  protected BucketIndexLocationMapper getLocationMapper(HoodieTable table, List<String> partitionPath) {
-    return new ConsistentBucketIndexLocationMapper(table, partitionPath);
+  public <R> HoodieData<HoodieRecord<R>> tagLocation(
+          HoodieData<HoodieRecord<R>> records, HoodieEngineContext context,
+          HoodieTable hoodieTable)
+          throws HoodieIndexException {
+    // Get bucket location mapper for the given partitions
+    List<String> partitions = records.map(HoodieRecord::getPartitionPath).distinct().collectAsList();
+    LOG.info("Get BucketIndexLocationMapper for partitions: " + partitions);
+    ConsistentBucketIndexLocationMapper mapper = new ConsistentBucketIndexLocationMapper(hoodieTable, partitions);
+
+    return records.mapPartitions(iterator ->
+            new LazyIterableIterator<HoodieRecord<R>, HoodieRecord<R>>(iterator) {
+              @Override
+              protected HoodieRecord<R> computeNext() {
+                // TODO maybe batch the operation to improve performance
+                HoodieRecord record = inputItr.next();
+                Option<HoodieRecordLocation> loc = mapper.getRecordLocation(record.getKey());
+                return tagAsNewRecordIfNeeded(record, loc);
+              }
+            }, false);
   }
 
   /**
@@ -176,7 +194,7 @@ public class HoodieSparkConsistentBucketIndex extends HoodieBucketIndex {
     return false;
   }
 
-  public class ConsistentBucketIndexLocationMapper implements BucketIndexLocationMapper {
+  public class ConsistentBucketIndexLocationMapper implements Serializable {
 
     /**
      * Mapping from partitionPath -> bucket identifier
@@ -191,14 +209,12 @@ public class HoodieSparkConsistentBucketIndex extends HoodieBucketIndex {
       }));
     }
 
-    @Override
-    public Option<HoodieRecordLocation> getRecordLocation(HoodieKey key, String partitionPath) {
+    public Option<HoodieRecordLocation> getRecordLocation(HoodieKey key) {
+      String partitionPath = key.getPartitionPath();
       ConsistentHashingNode node = partitionToIdentifier.get(partitionPath).getBucket(key, indexKeyFields);
       if (!StringUtils.isNullOrEmpty(node.getFileIdPrefix())) {
-        /**
-         * Dynamic Bucket Index doesn't need the instant time of the latest file group.
-         * We add suffix 0 here to the file uuid, following the naming convention, i.e., fileId = [uuid]_[numWrites]
-         */
+        // Dynamic Bucket Index doesn't need the instant time of the latest file group.
+        // We add suffix 0 here to the file uuid, following the naming convention, i.e., fileId = [uuid]_[numWrites]
         return Option.of(new HoodieRecordLocation(null, FSUtils.createNewFileId(node.getFileIdPrefix(), 0)));
       }
 
